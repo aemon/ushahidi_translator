@@ -1,8 +1,8 @@
 <link  href="<?php echo url::site('/plugins/translator/views/css/translator.css') ?>" rel="stylesheet" type="text/css" >
      <script type="text/javascript">
-if(!window.jQuery){
-    document.write('<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"/>');
-}
+//if(!window.jQuery){
+  //  document.write('<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"/>');
+//}
 </script>
 <div class="translator_wrap">
 <?php if(!empty($translate_fields)){ ?>
@@ -27,15 +27,25 @@ function translate_fields(){
 }
 
 function translate_field(from, to){
-jQuery.get('https://translate.yandex.net/api/v1.5/tr.json/translate',
-{
-    text:jQuery(from).val(),
-    lang:'<?php echo Kohana::config('translator.original_lang_ya_name')?>-<?php echo Kohana::config('translator.second_lang_ya_name')?>',
-    format:'plain',
-    key: '<?php echo Kohana::config('translator.yandex_key')?>'},
-function(data){
-    jQuery(to).val(data.text);
-});
+   // jQuery.getJSON('https://translate.yandex.net/api/v1.5/tr.json/translate?text='+  encodeURIComponent(jQuery(from).val(), "UTF-8") +
+    jQuery.ajax({
+        url: 'https://translate.yandex.net/api/v1.5/tr.json/translate?text='+  encodeURIComponent(jQuery(from).val(), "UTF-8") +
+        '&lang=<?php echo Kohana::config('translator.original_lang_ya_name')?>-<?php echo Kohana::config('translator.second_lang_ya_name')?>'+
+        '&format=html&key=<?php echo Kohana::config('translator.yandex_key')?>&callback=datacallback',
+        type:'GET',
+        dataType: 'jsonp',
+         contentType: "application/json",
+         crossDomain: true,
+         success: function(data){
+            if (data.code==200){
+                jQuery(to).val(data.text);
+            }
+        }
+    });
+}
+
+function datacallback(){
+    
 }
 
 function re_translate_fields(){
@@ -45,14 +55,19 @@ function re_translate_fields(){
 }
 
 function re_translate_field(to, from){
-    jQuery.get('https://translate.yandex.net/api/v1.5/tr.json/translate',
-    {
-        text:jQuery(from).val(),
-        lang:'<?php echo Kohana::config('translator.second_lang_ya_name')?>-<?php echo Kohana::config('translator.original_lang_ya_name')?>',
-        format:'plain',
-        key: '<?php echo Kohana::config('translator.yandex_key')?>'},
-        function(data){
-            jQuery(to).val(data.text);
-        });
+    jQuery.ajax({
+        url: 'https://translate.yandex.net/api/v1.5/tr.json/translate?text='+  encodeURIComponent(jQuery(from).val(), "UTF-8") +
+        '&lang=<?php echo Kohana::config('translator.second_lang_ya_name')?>-<?php echo Kohana::config('translator.original_lang_ya_name')?>'+
+        '&format=html&key=<?php echo Kohana::config('translator.yandex_key')?>&callback=datacallback',
+        type:'GET',
+        dataType: 'jsonp',
+         contentType: "application/json",
+         crossDomain: true,
+         success: function(data){
+            if (data.code==200){
+                jQuery(to).val(data.text);
+            }
+        }
+    });
 }
 </script>
