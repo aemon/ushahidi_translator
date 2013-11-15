@@ -28,6 +28,11 @@
     $config['second_lang'] = 'uk_UA';
     $config['second_lang_ya_name'] = 'uk';
     // key from yandex-translate service 
-    $config['yandex_key'] = 'trnsl.1.1.20130920T141311Z.5214cfd4bd193fc7.105b47aa6bb6b0df1db2cd9599d2cfe6c0a0c428';
+    //$config['yandex_key'] = 'trnsl.1.1.20130920T141311Z.5214cfd4bd193fc7.105b47aa6bb6b0df1db2cd9599d2cfe6c0a0c428';
+  $config['yandex_key'] = 'trnsl.1.1.20130920T141311Z.5214cfd4bd193fc7.105b47aa6bb6b0df1db2cd9599d2cfe6c0a0c428';
+  //  $config['yandex_key'] = '20130920T141311Z.5214cfd4bd193fc7.105b47aa6bb6b0df1db2cd9599d2cfe6c0a0c428';
+  
+    $config['use_different_domains'] = true;
+    $config['domains_lang'] = array('ua.local'=>'uk_UA','ru.local'=>'ru_RU'); 
     
 ?>

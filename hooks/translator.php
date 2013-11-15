@@ -9,8 +9,10 @@ class translator {
 
     public function __construct()
     {
+        Event::add('ushahidi_action.get_domain_locale', array($this, 'get_domain_locale'));  
 //        mysql_query("SET NAMES utf8");
         Event::add('system.pre_controller', array($this, 'add'));
+        
         
         $this->table_prefix = Kohana::config('database.default.table_prefix');
         $this->table_alias = Kohana::config('translator.table_alias');
@@ -26,6 +28,7 @@ class translator {
         Event::add(Kohana::config('translator.run_translate_value'),  array($this, 'replace_value_for_translate')); 
         Event::add(Kohana::config('translator.run_translate_value_sql'),  array($this, 'replace_sql_for_translate')); 
         Event::add('ushahidi_action.add_translator_to_forwardreport',  array($this, 'add_translator_to_forwardreport')); 
+        Event::add('ushahidi_action.get_translator_from_forwardreport',  array($this, 'get_translator_from_forwardreport')); 
         Event::add('ushahidi_action.get_translator_from_forwardreport',  array($this, 'get_translator_from_forwardreport')); 
         
     }
@@ -102,6 +105,7 @@ class translator {
         $element_id = Event::$data['id']; 
         $field = Event::$data['field']; 
         $location =  Session::instance()->get('locale',FALSE);
+        var_dump($location);
         if ($location==Kohana::config('translator.second_lang')){  
             $query = "SELECT * FROM translator WHERE element_id=".$element_id.
                         " AND location='".$location."' AND field='".$field."' ";
@@ -115,7 +119,7 @@ class translator {
         }
     }
     
-    function replace_sql_for_translate(){
+function replace_sql_for_translate(){
         $db = Database::instance();     
         $sql = Event::$data; 
         
@@ -128,7 +132,8 @@ class translator {
 
                 $sql = substr($sql,0,$before)." LEFT JOIN translator as translator".$i." ON translator".$i.".element_id=".$this->table_alias.".id AND translator".$i.".field='".$field['name']."' ".substr($sql,$before, strlen($sql)); 
                 //var_export($sql);die;
-                $sql = str_ireplace($this->table_alias.".".$field['original_name'], "IFNULL (translator".$i.".value, ".$this->table_alias.".".$field['original_name'].") as ".$field['original_name']." ",$sql);
+                $sql = str_ireplace($this->table_alias.".".$field['original_name'], "IF ((translator".$i.".value IS NULL OR translator".$i.".value='')  , ".$this->table_alias.".".$field['original_name'].", translator".$i.".value ) as ".$field['original_name']." " ,
+                $sql);
                 $i++;
             }
             Event::$data = $sql; 
@@ -181,6 +186,21 @@ class translator {
                 $query = $db->query($query);
             }
         } */
+    }
+    
+    function get_domain_locale(){
+        
+        if (Kohana::config('translator.use_different_domains')==true){
+            $domains_langs = Kohana::config('translator.domains_lang');
+            $locale = $domains_langs[$_SERVER['HTTP_HOST']];
+	  // var_dump($_SERVER['HTTP_HOST']); 
+      // var_dump($locale);
+            if (!empty($locale)){
+                Session::instance()->set('locale',$locale);
+                Kohana::config_set('locale.language', $locale);
+            }
+       }
+        
     }
 }
    
