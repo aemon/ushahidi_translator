@@ -33,6 +33,6 @@
   //  $config['yandex_key'] = '20130920T141311Z.5214cfd4bd193fc7.105b47aa6bb6b0df1db2cd9599d2cfe6c0a0c428';
   
     $config['use_different_domains'] = true;
-    $config['domains_lang'] = array('ua.local'=>'uk_UA','ru.local'=>'ru_RU'); 
+    $config['domains_lang'] = array('uamap.112.ua'=>'uk_UA','map.112.ua'=>'ru_RU'); 
     
 ?>

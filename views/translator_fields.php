@@ -31,7 +31,7 @@ function translate_field(from, to){
     jQuery.ajax({
         url: 'https://translate.yandex.net/api/v1.5/tr.json/translate?text='+  encodeURIComponent(jQuery(from).val(), "UTF-8") +
         '&lang=<?php echo Kohana::config('translator.original_lang_ya_name')?>-<?php echo Kohana::config('translator.second_lang_ya_name')?>'+
-        '&format=html&key=<?php echo Kohana::config('translator.yandex_key')?>&callback=datacallback',
+        '&format=plain&key=<?php echo Kohana::config('translator.yandex_key')?>&callback=datacallback',
         type:'GET',
         dataType: 'jsonp',
          contentType: "application/json",
@@ -58,7 +58,7 @@ function re_translate_field(to, from){
     jQuery.ajax({
         url: 'https://translate.yandex.net/api/v1.5/tr.json/translate?text='+  encodeURIComponent(jQuery(from).val(), "UTF-8") +
         '&lang=<?php echo Kohana::config('translator.second_lang_ya_name')?>-<?php echo Kohana::config('translator.original_lang_ya_name')?>'+
-        '&format=html&key=<?php echo Kohana::config('translator.yandex_key')?>&callback=datacallback',
+        '&format=plain&key=<?php echo Kohana::config('translator.yandex_key')?>&callback=datacallback',
         type:'GET',
         dataType: 'jsonp',
          contentType: "application/json",

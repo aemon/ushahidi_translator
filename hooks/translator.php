@@ -105,7 +105,7 @@ class translator {
         $element_id = Event::$data['id']; 
         $field = Event::$data['field']; 
         $location =  Session::instance()->get('locale',FALSE);
-        var_dump($location);
+        //var_dump($location);
         if ($location==Kohana::config('translator.second_lang')){  
             $query = "SELECT * FROM translator WHERE element_id=".$element_id.
                         " AND location='".$location."' AND field='".$field."' ";
@@ -187,23 +187,21 @@ function replace_sql_for_translate(){
             }
         } */
     }
-    
+
     function get_domain_locale(){
-        
+
         if (Kohana::config('translator.use_different_domains')==true){
             $domains_langs = Kohana::config('translator.domains_lang');
             $locale = $domains_langs[$_SERVER['HTTP_HOST']];
 	  // var_dump($_SERVER['HTTP_HOST']); 
-      // var_dump($locale);
+	  // var_dump($locale);
             if (!empty($locale)){
                 Session::instance()->set('locale',$locale);
                 Kohana::config_set('locale.language', $locale);
             }
        }
-        
+
     }
 }
-   
-     
-    
+
 new translator();
